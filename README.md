@@ -1,22 +1,7 @@
 
 # Data Classification: Crafting BeatWave's Genre Tapestry
 
-Congratulations! You've made it through another _intense_ module, and now you're ready to show off your newfound Machine Learning skills!
-
-![awesome](https://raw.githubusercontent.com/learn-co-curriculum/dsc-phase-3-project-v2-3/main/images/smart.gif)
-
-All that remains in Phase 3 is to put your new skills to use with another large project!
-
-In this project description, we will cover:
-
-* Project Overview
-* Deliverables
-* Grading
-* Getting Started
-
-## Project Overview
-
-For this project, you will engage in the full data science process from start to finish, solving a **classification** problem using a **dataset of your choice**.
+### CRISP-DM outline
 
 ### Business Problem and Data
 
