@@ -31,6 +31,11 @@ Loudness: The "loudness" feature (measured in decibels) indicates the overall vo
 
 ### First Model: Decision Tree
 
+Decision trees are tree-like models where each internal node represents a feature or attribute, each branch represents a decision rule, and each leaf node represents the predicted outcome or class label. Decision trees are particularly useful for tasks like genre classification of music due to their intuitive nature and ability to handle complex decision boundaries.
+
+A decision tree algorithm recursively partitions the feature space by selecting the most informative features at each internal node. It makes decisions based on a set of rules derived from the training data. These rules are learned during the training process, which involves finding the best splitting points that maximize the separation between different classes.
+
+
 **Initial Model Accuracy:** 0.5722727809951542
 
 **Class Distribution and Weights:** 
@@ -74,6 +79,42 @@ Grid search is useful because it automates the process of finding the best hyper
 
 ![Tuned DT Metrics](Images/Tuned_DT_metrics.png)
 
+Above, we see that the model's accuracy has jumped from 0.57 (initial model) to 0.64. Nice! Let's get into the metric details:
+
+**Robust Performance:** dnb, hardstyle, psytrance, techhouse, techno, trance
+- High Precision and Recall: These genres demonstrate high precision and recall scores, indicating the model's ability to effectively predict instances of these genres.
+- Distinctive Features: The unique musical characteristics and well-defined features of these electronic genres make them easier for the model to distinguish.
+- Sufficient Data: There seems to be enough data available for these genres, enabling the model to learn their patterns accurately.
+
+**Moderate Performance:** Emo, Hiphop, RnB, Underground Rap
+- Balanced Precision and Recall: These genres show balanced precision and recall scores, suggesting that the model can predict instances of these genres reasonably well.
+- Variability in Features: These genres can have a range of musical traits, leading to moderate performance due to the complexity of their features.
+
+**Poor Performance:** Dark Trap, Pop, Rap, Trap Metal
+- Low Recall and Precision: These genres have lower precision and recall scores, indicating the model's struggle to accurately predict instances of these genres.
+- Feature Ambiguity or Similarity: The features that distinguish these genres might be ambiguous or similar to other genres, making it challenging for the model.
+
+***As we can see, the model's performance varies significantly across different genres.*** While it excels in some genres like "dnb," "hardstyle," and "psytrance," it struggles to accurately classify genres like "Pop," "Rap," and "Trap Metal." The macro and weighted average F1-scores provide insights into the overall model performance, with an accuracy of 64% suggesting ***moderate success in classifying music genres.***
+
+
+Below is a visual representation of a one level of depth of our tuned decision tree model:
+
+![Tuned DT Visual](Images/Tuned_DT_visual.png)
+
+***Interesting to note:*** the initial node in our Tuned Decision Tree visualization indicates that the first split is based on the feature "instrumentalness" with a threshold of 0.019. This means that the model is using the "instrumentalness" feature to decide how to separate instances into different classes. Instances with a value of "instrumentalness" less than or equal to 0.019 will follow one branch of the tree, while those with a value greater than 0.019 will follow another branch.
+
+
+### Third Model: Random Forest
+
+A ***Random Forest Classifier*** is a versatile ensemble learning algorithm that combines the predictive power of multiple decision trees to make accurate predictions. Each decision tree in the ensemble is constructed using a random subset of the training data and features, aiming to reduce overfitting and increase generalization. When making predictions, the final output is a result of aggregating the predictions from individual trees through majority voting.
+
+
+![RF Model Metrics](Images/rf_metrics.png)
+
+Since we took the time to visualize our first Decision Tree, it could be interestting to set random tree indices and let the code pick random trees from our random forest:
+
+
+![RF Model Visual](Images/rf_visual.png)
 
 
 
