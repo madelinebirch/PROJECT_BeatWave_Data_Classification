@@ -187,8 +187,8 @@ It's worth noting that our dataset is inherently limited in its scope. It is hea
 
 ├── Images
 
+├── .gitignore
+
+└── README.md
+
 ├── notebook.ipynb
-
-└── p3_presentation.pdf
-
-├── README.md
