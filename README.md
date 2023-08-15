@@ -111,287 +111,84 @@ A ***Random Forest Classifier*** is a versatile ensemble learning algorithm that
 
 ![RF Model Metrics](Images/rf_metrics.png)
 
-Since we took the time to visualize our first Decision Tree, it could be interestting to set random tree indices and let the code pick random trees from our random forest:
+Above, we see an improvement from ~0.63 in accuracy (tuned Decision Tree) to ~0.67 (Random Forest). Cool!
+
+
+Since we took the time to visualize our first Decision Tree, it could be interestting to set random tree indices and let the code pick random trees from our random forest to visualize:
 
 
 ![RF Model Visual](Images/rf_visual.png)
 
 
+### Fourth Model: kNN Baseline 
 
+We'll pivot to a completely different modeling technique to gain some clarity and keep our process diversified.
 
-#### Classification
+The K-Nearest Neighbors (k-NN) algorithm is a simple yet powerful supervised learning method used for classification tasks. It operates on the principle that similar data points tend to belong to the same class. For a given data point, k-NN identifies the (k) nearest neighbors in the training dataset and predicts the class label by majority vote among these neighbors.
 
-Recall the distinction between *classification* and *regression* models:
+![KNN Baseline Metrics](Images/knn_baseline_metrics.png)
 
- * Classification is used when the target variable is a *category*
- * Regression is used when the target variable is a *numeric value*
 
-(Categorical data may be represented in the data as numbers, e.g. 0 and 1, but they are not truly numeric values. If you're unsure, ask yourself "is a target value of 1 _one more than_ a target value of 0"; if it is one more, that is a regression target, if not, that is a classification target.)
+Based on the classification report and accuracy score, the k-Nearest Neighbors (k-NN) model is not performing well on our dataset. The overall accuracy is quite low at around 0.27, which means the model is not making accurate predictions on the majority of the data points.
 
-You already practiced performing a regression analysis in Phase 2, and you will have additional opportunities to work on regression problems in later phases, but **for this project, you must be modeling a classification problem**.
+### Final Model: Tuned kNN 
 
-#### Findings and Recommendations
+One possible reason for poor performance in the k-NN model could be ***lack of feature scaling.*** the k-NN algorithm is sensitive to the scale of features, and if features are not properly scaled, it can lead to biased results. Let's tune our k-NN model to see if performance improves.
 
-In the previous two projects, the framing was primarily *descriptive* and *inferential*, meaning that you were trying to understand the distributions of variables and the relationship between them. For this project you can still use these techniques, but make sure you are also using a ***predictive*** approach.
+#### Standardization of Features
 
-A predictive *finding* might include:
+To improve performance, we will try standardization (z-score normalization) to ensure features are scaled to a similar numerical range.
 
-* How well your model is able to predict the target
-* What features are most important to your model
+#### Optimal n_neighbors
 
-A predictive *recommendation* might include:
+Now, we can further tune our k-NN model by finding the optimal n_neighbors value. Earlier, we simply took the sqrt of our total number of data points and set it as 'k'. To further tune our model, we can use a function to find a good value of k. Using accuracy as the evaluation metric, the goal is to determine the number of neighbors that provides the best accuracy on the test set.
 
-* The contexts/situations where the predictions made by your model would and would not be useful for your stakeholder and business problem
-* Suggestions for how the business might modify certain input variables to achieve certain target results
+**Results:**
 
-#### Iterative Approach to Modeling
+![Tuned KNN Metrics](Images/tuned_knn_metrics.png)
 
-The expectations from the Phase 2 project still stand:
+We see that the optimal n_neighbors is 17, at which point the model would supposedly be performing at peak accuracy (around 0.60), assuming it doesn't rise or fall significantly with each increase of 'k'. Let's plot an elbow curve to see if this is accurate to our dataset:
 
-> You should demonstrate an iterative approach to modeling. This means that you must build multiple models. Begin with a basic model, evaluate it, and then provide justification for and proceed to a new model. After you finish refining your models, you should provide 1-3 paragraphs in the notebook discussing your final model.
+![Elbow Curve](Images/elbow_curve.png)
 
-With the additional techniques you have learned in Phase 3, be sure to explore:
 
-1. Model features and preprocessing approaches
-2. Different kinds of models (logistic regression, k-nearest neighbors, decision trees, etc.)
-3. Different model hyperparameters
+The above plot is an elbow curve depicting the relationship between the model's accuracy at different n_neighbor(s).
 
-At minimum you must build three models:
+We notice accuracy steadily rising with each increasing neighbor until plateauing at around 0.60. This plateauing suggests that the model has reached a point where adding more neighbors doesn't significantly improve accuracy. The optimal value of n_neighbors is likely around this plateau (~17), where the model performs well without overfitting.
 
-* A simple, interpretable baseline model (logistic regression or single decision tree)
-* A more-complex model (e.g. random forest)
-* A version of either the simple model or more-complex model with tuned hyperparameters
+So, it looks like our original function to find best_k matches our method of visualizing the model's plateau point.
 
-#### Classification Metrics
 
-**You must choose appropriate classification metrics and use them to evaluate your models.** Choosing the right classification metrics is a key data science skill, and should be informed by data exploration and the business problem itself. You must then use this metric to evaluate your model performance using both training and testing data.
+## Conclusion
 
-## Deliverables
+To kickstart BeatWave's genre classification methods, we've embarked upon many different modeling iterations: a decision tree, a tuned decision tree, a random forest, a k-NN AND a tuned k-NN. That's a lot of models, and with tuning and tweaking, they all performed moderately well.
 
-There are three deliverables for this project:
+Our most accurate and robust model seems to be our Random Forest model, with an accuracy of ~ 0.67. With some more pruning and hyperperameter tuning, we think this model has the potential to perform the best out of all modeling approaches explored in this
 
-* A **non-technical presentation**
-* A **Jupyter Notebook**
-* A **GitHub repository**
+### Limitations of the Data
 
-The deliverables requirements are almost the same as in the Phase 1 and Phase 2 projects. ***The only difference between the Phase 2 and Phase 3 project checklist is that the "Regression Results" element has been replaced with an "Evaluation" element.***
+It's worth noting that our dataset is inherently limited in its scope. It is heavily imbalanced and, for a streaming platform like BeatWave, we're likely to want to delve deeper into a larger dataset. The fact remains that our dataset is only at around 42,000 data points, which is pretty low considering how much electronic music exists in the world. We're also limited by the number of features (11-12 notable features). To get more accurate and robust classification models...
 
-### Non-Technical Presentation
+### ...Consider Next Steps:
 
-Recall that the non-technical presentation is a slide deck presenting your analysis to ***business stakeholders***, and should be presented live as well as submitted in PDF form on Canvas.
+- Find or compile a much larger dataset, ensuring that majority of datapoints contain data for all features to avoid class imbalances.
 
-We recommend that you follow this structure, although the slide titles should be specific to your project:
+- Invest in feature engineering:
+    - Aggregating Features: You can calculate aggregate statistics (e.g., mean, median, variance) over different segments of a song to capture more nuanced characteristics. For example, you could calculate energy changes over different parts of the song.
+    - Feature Interaction: Create new features by combining existing ones. For instance, you could multiply 'energy' and 'loudness' to capture the energetic loudness of a song.
+    - Temporal Patterns: Explore the temporal patterns of features. For example, you could create features that represent the rate of change of features over time intervals.
+    - Harmonic and Melodic Features: Extract features related to the harmonic and melodic aspects of music, such as chord progressions, melody patterns, and tonal intervals.
+    - Domain-Specific Features: Create features specific to the domain of music, such as genre-specific features or music theory-based features.
+    - Data Transformation: Apply mathematical transformations to the features, such as logarithmic scaling, to amplify certain aspects of the data. 
+    
+## Repository structure
 
-1. Beginning
-    - Overview
-    - Business and Data Understanding
-2. Middle
-    - Modeling
-    - **Evaluation**
-3. End
-    - Recommendations
-    - Next Steps
-    - Thank you
+├── Data
 
-Make sure that your discussion of classification modeling is geared towards a non-technical audience! Assume that their prior knowledge of machine learning is minimal. You don't need to explain the details of your model implementations, but you should explain why classification is useful for the problem context. Make sure you translate any metrics or feature importances into their plain language implications.
+├── Images
 
-The graded elements for the non-technical presentation are the same as in [Phase 1](https://github.com/learn-co-curriculum/dsc-phase-1-project-v2-3#deliverables) and Phase 2.
+├── notebook.ipynb
 
-### Jupyter Notebook
+└── README.md
 
-Recall that the Jupyter Notebook is a notebook that uses Python and Markdown to present your analysis to a ***data science audience***. You will submit the notebook in PDF format on Canvas as well as in `.ipynb` format in your GitHub repository.
-
-The graded elements for the Jupyter Notebook are:
-
-* Business Understanding
-* Data Understanding
-* Data Preparation
-* Modeling
-* **Evaluation**
-* Code Quality
-
-### GitHub Repository
-
-Recall that the GitHub repository is the cloud-hosted directory containing all of your project files as well as their version history.
-
-The requirements are the same as in [Phase 1](https://github.com/learn-co-curriculum/dsc-phase-1-project-v2-3#github-repository) and Phase 2, except for the required sections in the `README.md`.
-
-For this project, the `README.md` file should contain:
-
-* Overview
-* Business and Data Understanding
-  * Explain your stakeholder audience and dataset choice here
-* Modeling
-* **Evaluation**
-* Conclusion
-
-Just like in Phase 1 and 2, the `README.md` file should be the bridge between your non technical presentation and the Jupyter Notebook. It should not contain the code used to develop your analysis, but should provide a more in-depth explanation of your methodology and analysis than what is described in your presentation slides.
-
-## Grading
-
-***To pass this project, you must pass each project rubric objective.*** The project rubric objectives for Phase 3 are:
-
-1. Attention to Detail
-2. ML Communication
-3. Data Preparation for Machine Learning
-4. Nonparametric and Ensemble Modeling
-
-### Attention to Detail
-
-Just like in Phase 1 and 2, this rubric objective is based on your completion of checklist items. ***In Phase 3, you need to complete 80% (8 out of 10) or more of the checklist elements in order to pass the Attention to Detail objective.***
-
-**NOTE THAT THE PASSING BAR IS HIGHER IN PHASE 3 THAN IT WAS IN PHASE 2!**
-
-The standard will increase with each Phase, until you will be required to complete all elements to pass Phase 5 (Capstone).
-
-#### Exceeds Objective
-
-90% or more of the project checklist items are complete
-
-#### Meets Objective (Passing Bar)
-
-80% of the project checklist items are complete
-
-#### Approaching Objective
-
-70% of the project checklist items are complete
-
-#### Does Not Meet Objective
-
-60% or fewer of the project checklist items are complete
-
-### ML Communication
-
-Recall that communication is one of the key data science "soft skills". In Phase 3, we are specifically focusing on ML Communication. We define ML Communication as:
-
-> Communicate the **performance** of and **insights** generated by machine learning models to diverse audiences via writing, live presentation, and visualization
-
-High-quality ML Communication includes rationale, results, limitations, and recommendations:
-
-* **Rationale:** Explaining why you are using machine learning rather than a simpler form of data analysis
-  * What about the problem or data is suitable for this form of analysis?
-  * For a data science audience, this includes your reasoning for the changes you applied while iterating between models.
-* **Results:** Describing the classification metrics
-  * You can report multiple metrics for a single model, but make sure that indicate a reason for which metrics you are using (and don't try to use all of them at once)
-  * For a business audience, make sure you connect any metrics to real-world implications. You do not need to get into the details of how the model works.
-  * For a data science audience, you don't need to explain what a metric is, but make sure you explain why you chose that particular one.
-* **Limitations:** Identifying the limitations and/or uncertainty present in your analysis
-  * Are there certain kinds of records where model performance is worse? If you used this model in production, what kinds of problems might that cause?
-  * In general, this should be more in-depth for a data science audience and more surface-level for a business audience.
-* **Recommendations:** Interpreting the model results and limitations in the context of the business problem
-  * What should stakeholders _do_ with this information?
-
-#### Exceeds Objective
-
-Communicates the rationale, results, limitations, and specific recommendations generated by a classification model
-
-> See above for an extended explanation of these terms.
-
-#### Meets Objective (Passing Bar)
-
-Successfully communicates model metrics without any major errors
-
-> The minimum requirement is to communicate the _results_, meaning at least one overall model metric for your final model. See the Approaching Objective section for an explanation of what a "major error" means.
-
-#### Approaching Objective
-
-Communicates model metrics with at least one major error
-
-> A major error means that some aspect of your explanation is fundamentally incorrect. For example, if you report a regression metric for a classification model, that would be a major error. Another example would be if you report the model's performance on the training data, rather than the model's performance on the test data.
-
-#### Does Not Meet Objective
-
-Does not communicate model metrics
-
-> It is not sufficient just to display the `classification_report` or confusion matrix for a given model. You need to focus on one or more specific metrics that are important for your business case.
-
-### Data Preparation for Machine Learning
-
-We define this objective as:
-
-> Applying appropriate preprocessing and feature engineering steps to tabular data in preparation for predictive modeling
-
-This builds on the data preparation requirement from the Phase 2 project; you still need to ensure that you have a strategy for dealing with missing and non-numeric data.
-
-For the Phase 3 project, make sure you also consider:
-
-* **Preventing Data Leakage:** As you prepare data for modeling, make sure that you are correctly applying data preparation techniques so that your model's performance on test data realistically represents how it would perform on unseen data. For scikit-learn transformers specifically, ***make sure that you do not fit the transformer on the test data***. Instead, fit the transformer on the training data and use it to transform both the train and test data.
-* **Scaling:** If you are using a distance-based model algorithm (e.g. kNN or logistic regression with regularization), make sure you scale your data prior to fitting the model.
-
-Feature engineering is encouraged but not required for this project.
-
-#### Exceeds Objective
-
-Goes above and beyond with data preparation, such as feature engineering or using pipelines
-
-> Relevant examples of feature engineering will depend on your choice of dataset and business problem.
-
-> Pipelines are the best-practice approach to data preparation that avoids leakage, but they can get complicated very quickly. We therefore do not recommend that you use pipelines in your initial modeling approach, but rather that you refactor to use pipelines if you have time.
-
-#### Meets Objective (Passing Bar)
-
-Successfully prepares data for modeling, using a final holdout dataset that is transformed by (but not fitted on) transformers used to prepare training data AND scaling data when appropriate
-
-> See the descriptions above for explanations of how to use transformers and scaling.
-
-#### Approaching Objective
-
-Prepares some data successfully, but has at least one major error
-
-> A major error means that some aspect of your data preparation is fundamentally incorrect. Some examples of major errors include: (1) fitting transformers on test data, (2) not performing a train-test split, (3) not scaling data that is used in a distance-based model.
-
-#### Does Not Meet Objective
-
-Does not prepare data for modeling
-
-> This includes projects where data is partially prepared, but the model is unable to run.
-
-### Nonparametric and Ensemble Modeling
-
-This builds on the linear modeling requirement from the Phase 2 project. Your project should consider the different types of models that have been covered in the course so far and whether they are appropriate or inappropriate for the dataset and business case you are working with.
-
-Your final model can still be a linear model (e.g. logistic regression) but you should explore at least one nonparametric model (e.g. decision tree) as well and articulate why one or the other is a better approach.
-
-#### Exceeds Objective
-
-Goes above and beyond in the modeling process, such as articulating why a given model type is best suited to the problem or correctly using scikit-learn models not covered in the curriculum
-
-> Another way you might go above and beyond would be to create custom Python classes, possibly inheriting from scikit-learn classes.
-
-#### Meets Objective (Passing Bar)
-
-Uses at least two types of scikit-learn model and tunes at least one hyperparameter in a justifiable way without any major errors
-
-> See the "Iterative Approach to Modeling" section above for a more-lengthy explanation.
-
-> Once again, ideally you would include written justifications for each model iteration, but at minimum the iterations must be _justifiable_.
-
-> For an explanation of "major errors", see the description under "Approaching Objective".
-
-#### Approaching Objective
-
-Builds multiple classification models with at least one major error
-
-> A major error means that some aspect of your modeling approach is fundamentally incorrect.
-
-> Once again, the number one major error to avoid is including the target as one of your features. If you are getting metrics that are "too good to be true", make sure that you removed the target (`y`) from your data before fitting the model.
-
-> Other examples of major errors include: using a numeric target value (since this is a classification project), not starting with a baseline model (e.g. proceeding directly to a Random Forest model), or not tuning hyperparameters in a justifiable way (e.g. reducing regularization on a model that is overfitting)
-
-#### Does Not Meet Objective
-
-Does not build multiple classification models
-
-## Getting Started
-
-Please start by reviewing the contents of this project description. If you have any questions, please ask your instructor ASAP.
-
-Once you are ready to begin the project, you will need to complete the Project Proposal.
-
-Recall that more information is available in [Phase 3 Project - Choosing a Dataset](https://github.com/learn-co-curriculum/dsc-phase-3-choosing-a-dataset).
-
-To get started with project development, create a new repository on GitHub. For this project, we recommend that you do not fork the template repository, but rather that you make a new repository from scratch, starting by going to [github.com/new](https://github.com/new).
-
-## Summary
-
-This project is an opportunity to expand your data science toolkit by evaluating, choosing, and working with new datasets. Spending time up front making sure you have a good dataset for a solvable problem will help avoid the major problems that can sometimes derail data science projects. You've got this!
+├── presentation.pdf
