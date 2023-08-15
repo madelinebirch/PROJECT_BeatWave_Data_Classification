@@ -1,15 +1,82 @@
 
 # Data Classification: Crafting BeatWave's Genre Tapestry
 
-### CRISP-DM outline
+![BeatWave Logo](Images/bw_4.png)
 
-### Business Problem and Data
 
-Similar to the Phase 2 project, it is up to you to define a stakeholder and business problem. Unlike the Phase 2 project, you are also responsible for choosing a dataset.
+## Business Understanding
 
-For complete details, see [Phase 3 Project - Choosing a Dataset](https://github.com/learn-co-curriculum/dsc-phase-3-choosing-a-dataset).
+We are working for a fictional startup called 'BeatWave', an up-and-coming music streaming platform specializing in electronic music. Through the iterative process of data classification modeling, we can begin to sift through popular electronic songs and give BeatWave a better understanding of which sonic metrics predict which genres. This will allow for a streamlined approach to classifying titles into their appropriate categories.
 
-### Key Points
+## Data Understanding
+
+Data source: https://www.kaggle.com/datasets/mrmorj/dataset-of-songs-in-spotify
+
+We are using an open source dataset that displays sample data from popular streaming platform Spotify. Using this data will help us gauge our place in competition with the world's leading streaming service.
+
+
+## Data Preparation
+
+Using standard data cleaning methods, we narrowed down workable features. 
+
+#### Features of note:
+
+Danceability: The "danceability" feature (ranging from 0 to 1) indicates how suitable a track is for dancing. Higher values suggest that the track is more danceable, likely characterized by a strong rhythm, beat, and tempo.
+
+Energy: The "energy" feature (ranging from 0 to 1) represents the intensity and activity of a track. Tracks with high energy values are likely to be more fast-paced and lively, making them appealing for activities that require a high level of engagement and excitement.
+
+Loudness: The "loudness" feature (measured in decibels) indicates the overall volume of a track. Higher values suggest that the track is relatively louder. This feature can play a role in determining the mood or atmosphere of the track, and it might be important for creating playlists with a consistent volume level or for selecting tracks that fit a particular ambiance.
+
+## Modeling
+
+### First Model: Decision Tree
+
+**Initial Model Accuracy:** 0.5722727809951542
+
+**Class Distribution and Weights:** 
+
+After taking class distribution and weights into account, we came to the following metrics:
+
+![First Model Metrics](Images/first_score_metrics.png)
+
+**Precision:** a higher precision value indicates that the model has ***fewer false positives for that specific class.***
+For instance, in the case of "trance" (Class 3), the precision is approximately 0.134454. This means that out of all instances the model predicted as "trance," only around 13.45% of them are correct, while the remaining are false positives.
+
+
+**Recall:** a higher recall value indicates that the model has ***fewer false negatives for that particular class.***
+For instance, the recall for "Dark Trap" (Class 1) is approximately 0.586510. This means that the model correctly identified around 58.65% of all instances of "Dark Trap," while some instances were missed and resulted in false negatives.
+
+**The F1 score:** provides a balanced measure of the model's performance, considering both false positives and false negatives. It is especially useful when dealing with imbalanced datasets where the number of samples in different classes varies significantly.
+With an F1 score of approximately 0.55516, the model achieves a balance between precision and recall when considering all genres together. This indicates that the model's ability to correctly identify both positive and negative instances (precision and recall) for each genre is ***moderate but not exceptional.***
+
+**ROC-AUC Analysis:** 
+
+Below is a snapshot of a large ROC curve plot indicating the AUC of each genre, and a dataframe of all genres with their corresponding AUC values within the model:
+
+![ROC Snapshot](Images/ROC_Snapshot.png)
+
+![AUC Values](Images/AUC_values.png)
+
+**Lowest AUC Value (0.575):** The genre 'trance' exhibits the lowest AUC value, suggesting a moderate ability of the model to distinguish 'trance' songs from other genres.
+
+**Mid-Level AUC Values (0.627 - 0.901):** Genres like 'Hiphop' (AUC: 0.627), 'Underground Rap' (AUC: 0.653), 'trap' (AUC: 0.672), 'Dark Trap' (AUC: 0.782), 'Pop' (AUC: 0.873), 'Emo' (AUC: 0.886), and 'Rap' (AUC: 0.901) showcase moderate to strong performance in classification, indicating the model's ability to effectively differentiate these genres from others.
+
+**Highest AUC Value (0.967):** The genre 'techno' stands out with the highest AUC value, indicating exceptional performance in classifying 'techno' songs from other genres.
+
+
+### Second Model: Tuned Decision Tree
+
+By tuning hyperparameters, we are fine-tuning the decision tree model, making it more effective in capturing the underlying patterns and relationships in the data, thereby improving its predictive capabilities on unseen data.
+
+#### Grid Search
+
+Grid search is useful because it automates the process of finding the best hyperparameters, saving us from manually trying out different combinations. In a grid search, we create a "grid" of all possible combinations of hyperparameter values we want to explore. The algorithm then trains and evaluates the model with each combination of hyperparameters using a specified evaluation metric based on cross-validation.
+
+![Tuned DT Metrics](Images/Tuned_DT_metrics.png)
+
+
+
+
 
 #### Classification
 
