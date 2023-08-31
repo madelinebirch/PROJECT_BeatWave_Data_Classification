@@ -1,6 +1,9 @@
 
 # Data Classification: Crafting BeatWave's Genre Tapestry
 
+Madeline Birch
+8/20/2023
+
 ![BeatWave Logo](Images/bw_4.png)
 
 
@@ -36,7 +39,12 @@ Using standard data cleaning methods, we narrowed down workable features.
 - **Loudness:** The "loudness" feature (measured in decibels) indicates the overall volume of a track. Higher  values suggest that the track is relatively louder. This feature can play a role in determining the mood or atmosphere of the track, and it might be important for creating playlists with a consistent volume level or for selecting tracks that fit a particular ambiance.
 
 ***Other features include:*** liveness (measure of how likely the track was recorded live), acousticness (level of acoustic instrumentation present in the track), speechiness (detection of spoken words in track), mode (musical modality of the track -- major, minor, etc.), valence (overall positivity or negativity of the track), and time signature (number of beats per bar, which notes get one beat).
- 
+
+![Genre Distributions](Images/genre_distributions.png)
+
+We can see above that we have a moderately imbalanced dataset, with the largest amount of instances occurring in the 'Underground Rap' and 'Dark Trap' categories, and the fewest instances occurring in the 'Emo' and 'Pop' categories. This is worth bearing in mind as we progress in modeling and for next steps, as it is clear the dataset could be enhanced immensely by adding more data to support weaker classes.
+
+
 ## Modeling
 
 ### First Model: Decision Tree
