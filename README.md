@@ -19,9 +19,7 @@ We are using an open source dataset that displays sample data from popular strea
 
 Using standard data cleaning methods, we narrowed down workable features. 
 
-#### Features of note:
-
-**Features of note:**
+#### Data Features
 
 - **Instrumentalness:** Instrumentalness measures the presence of instrumental content in a track. Higher values suggest the track is primarily instrumental.
 
@@ -123,13 +121,39 @@ A ***Random Forest Classifier*** is a versatile ensemble learning algorithm that
 
 ![RF Model Metrics](Images/rf_metrics.png)
 
-Above, we see an improvement from ~0.63 in accuracy (tuned Decision Tree) to ~0.67 (Random Forest). Cool!
+Above, we see an improvement from ~0.63 in accuracy (tuned Decision Tree) to ~0.67 (Random Forest).
+
+Let's take a look at the above findings in the context of a confusion matrix:
+
+
+![RF Model Confusion Matrix](Images/rf_confusion_matrix.png)
+
+**Rows and Columns:**
+
+Rows represent the true classes (actual genres). Columns represent the predicted classes.
+
+**Diagonal Values (True Positives - TP):**
+- These values are along the diagonal, from the top-left to the bottom-right. Each diagonal cell indicates the number of instances correctly predicted for that specific genre.
+- Genres with higher diagonal values, such as "dnb," "hardstyle," "psytrance," "techhouse," "techno," "trance," and "trap," suggest that the model is correctly predicting those genres relatively well.
+
+**Off-Diagonal Values (False Positives and False Negatives):**
+- These values are outside the diagonal. They represent instances that were misclassified.
+- Some genres, like "Dark Trap," "Hiphop," "Rap," and "Trap Metal," have significant off-diagonal values, indicating misclassifications.
+- High off-diagonal values can be a sign of confusion between similar genres or challenges in distinguishing certain classes.
 
 
 Since we took the time to visualize our first Decision Tree, it could be interestting to set random tree indices and let the code pick random trees from our random forest to visualize:
 
 
 ![RF Model Visual](Images/rf_visual.png)
+
+**Feature Importances:**
+
+It's time to consider feature importance, which is a measure of the contribution of individual features toward making accurate predictions. It helps us understand which features have the most influence on the model's decision-making process.
+
+Higher importance scores suggest that changing the values of those features has a greater impact on the model's outcomes. Features with low importance scores may be less influential in making accurate predictions.
+
+![RF Feature Importances](Images/rf_feature_importances.png)
 
 
 ### Fourth Model: kNN Baseline 
@@ -181,7 +205,26 @@ Our most accurate and robust model seems to be our Random Forest model, with an 
 
 It's worth noting that our dataset is inherently limited in its scope. It is heavily imbalanced and, for a streaming platform like BeatWave, we're likely to want to delve deeper into a larger dataset. The fact remains that our dataset is only at around 42,000 data points, which is pretty low considering how much electronic music exists in the world. We're also limited by the number of features (11-12 notable features). To get more accurate and robust classification models...
 
-### ...Consider Next Steps:
+### Recommendations
+
+Our most accurate and robust model seems to be the **Random Forest** model, with an accuracy of ~ 0.67. With some more pruning and hyperperameter tuning, we think this model has the potential to perform the best out of all modeling approaches explored in this process. By refining the model to reduce both false positives and false negatives, BeatWave can provide users with a more accurate and enjoyable music discovery experience, ultimately enhancing user retention and platform growth. Here are some ways paying intentional attention to false positives and negatives can impact BeatWave:
+
+- *User Experience:* False positives could lead to users encountering music that does not match their preferences, causing frustration and potentially leading to decreased user engagement. False negatives might prevent users from discovering songs they would appreciate, leading to missed opportunities for engagement.
+
+- *Retention and Recommendations:* Both false positives and false negatives can impact the quality of song recommendations. If users receive incorrect recommendations (false positives) or miss out on relevant ones (false negatives), they may be less likely to continue using the platform.
+
+- *Content Curation:* BeatWave's reputation and user trust depend on accurate genre categorization. High false positive rates could undermine the platform's credibility in suggesting appropriate music.
+
+- *Competitive Edge:* In the competitive landscape of music streaming, accurate genre prediction and personalized recommendations are crucial for user satisfaction and platform success. Addressing false positives and false negatives could help BeatWave differentiate itself positively.
+
+
+To enhance the model's performance, it's advisable to concentrate on the key features that notably affect precision, recall, and F1-score. Notably, features such as "tempo," "duration_ms," and "danceability" are among the significant factors influencing the model's predictions. Directing attention to these particular features during the song classification process could potentially contribute to an improved accuracy. This could look a number of ways:
+  - **Feature Scaling:** One might employ standardization to scale features of note to ensure consistent impact on Random Forest performance.
+  - **Hyperparameter Tuning:** During the model training phase, experiment with different hyperparameters and configurations. Some hyperparameters, such as the number of trees in the forest, can impact the model's sensitivity to certain features.
+  - **Feedback Loop:** Continuously collect user feedback and observed predictions to refine the model over time. If the model's predictions for specific genres remain inconsistent, consider re-evaluating the data quality and model settings related to the influential features.
+
+
+### Next Steps
 
 - Find or compile a much larger dataset, ensuring that majority of datapoints contain data for all features to avoid class imbalances.
 
